@@ -1,0 +1,117 @@
+﻿
+
+Bolum 1 : Chain of Responsibiility Design Pattern ( ASP.Net Core 5.0 - MSSQL )
+
+
+Bolum 1 Video 4 Context ve Entity Sınıfları
+
+
+DAL adında bir klasör acalım 
+
+Data Access Layer 
+
+DAL içinde V4Context ve V4CustomerProcess class larını acalım 
+
+
+1. not baslangıc 
+
+CustomerProcess a gidelim ve gerekli notları yazalım
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+using Microsoft.EntityFrameworkCore;
+
+namespace DesignPattern.ChainOfResponsibility.DAL
+{
+    public class V4Context : DbContext
+    {
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("server=DESKTOP-K88T80S\\SQLEXPRESS;initial catalog=DesignPattern1;integrated security=true;");
+        }
+
+        public DbSet<V4CustomerProcess> V4CustomerProcesses { get; set; }
+        
+    }
+
+}
+
+/*
+ 
+1. not bitiş CustomerProcess den geldik
+
+2. not baslangıc 
+
+:DbContext den miras alalım 
+ 
+override OnConfi yazınca kendı tamamlıyor .net te code first de db i ayaga kaldırma işlemi bu 
+
+
+            optionsBuilder.UseSqlServer("server=DESKTOP-K88T80S\\SQLEXPRESS;initial catalog=DesignPattern1;integrated security=true;");
+
+server => sql servername
+initial catalog => db adı 
+integrated security => güvenlik ayarı
+
+        public DbSet<V4CustomerProcess> V4CustomerProcesses { get; set; }
+
+dbset ile db e gonderiyoruz class ı 
+
+V4CustomerProcess sınıf adı
+V4CustomerProcesses tablo adı
+
+diger videodan devam edelim
+
+ 
+*/
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+namespace DesignPattern.ChainOfResponsibility.DAL
+{
+    public class V4CustomerProcess
+    {
+
+        public int CustomerProcessID { get; set; }
+        public string Name { get; set; }
+        public string Amount { get; set; }
+        public string EmployeeName { get; set; }
+        public string Description { get; set; }
+
+
+    }
+}
+
+
+/*
+ 
+
+1. not baslangıc b1 v4 den geldik
+
+gerekli probları tanımlamaız gerekiyor
+buradaki planlar
+
+musteri bankaya gidecek veznedara gidecek para isteyecek olumlu olumsuz cevap alacak olumsuz ise bir üstüne yönlendirecek tarih ve saat bilgisi olacak sonra 2. adım gelecek vs 
+
+1- Ali Çınar => 340.000 - Veznedar Ayşe Öztürk - Veznedar olarak bu parayı ödeyemiyorum, bu sebeple işlemi Müdür yardımcıma iletiyorum. - 08.11.2025 - 20:22
+2- Ali Çınar => 340.000 - Müdür Yardımcısı Merve Kayalı ....
+
+Gerekli probları yazalım 
+
+        public int CustomerProcessID { get; set; } tutulan id 
+        public string Name { get; set; } musteri adi
+        public string Amount { get; set; } kredi miktarı
+        public string EmployeeName { get; set; } calısan adı 
+        public string Description { get; set; } acıklama
+ 
+context sınıfına gidelim db ile baglantı yapalım
+
+1. not bitiş 
+
+ 
+*/

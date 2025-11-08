@@ -1,0 +1,150 @@
+﻿
+
+Bolum 1 : Chain of Responsibiility Design Pattern ( ASP.Net Core 5.0 - MSSQL )
+
+
+Bolum 1 Video 3_0 Proje Oluşturma 
+
+
+Blank Solution açalım
+
+DesignPatern
+
+altına bir klasör açalım
+
+ChainOfResponsibilityDesignPattern
+
+klasör içine proje oluşturalım
+
+ASP.Net Core Web App (Model-View-Controller)
+
+Project Name
+
+DesignPattern.ChainOfResponsibility
+
+.net 5.0 - authentication type none - configure for https check
+
+
+Bolum 1 Video 3_1 Paketlerin Yuklenmesi
+
+
+DesignPattern.ChainOfResponsibility uygulamasına tıklanıp manage nuget packages e gelelim
+
+Microsoft.EntityFrameworkCore 5.0.17 i yükleyelim
+
+Microsoft.EntityFrameworkCore.Design 5.0.17 i yükleyelim
+
+Microsoft.EntityFrameworkCore.SqlServer 5.0.17 i yükleyelim
+
+Microsoft.EntityFrameworkCore.Tools 5.0.17 i yükleyelim
+
+
+-------------------------------
+
+
+bu paketler ne işe yarıyor 
+
+Harika soru 👍
+Bu dört NuGet paketi, Entity Framework Core (EF Core) ile çalışırken genellikle birlikte kullanılır ama her birinin farklı bir görevi vardır.
+Aşağıda senin belirttiğin sürüm olan 5.0.17 için tek tek açıklayayım 👇
+
+🧩 1. Microsoft.EntityFrameworkCore
+
+EF Core’un ana kütüphanesidir.
+
+ORM (Object Relational Mapper) işlevini sağlar.
+
+Yani C# sınıflarını (entity’leri) veritabanı tablolarına dönüştürür.
+
+LINQ sorgularını SQL’e çevirir.
+
+Değişiklik takibini, ilişkileri, veritabanı oluşturma/senkronizasyon işlemlerini yönetir.
+
+📦 İçerdiği şeyler:
+
+DbContext, DbSet<T> sınıfları
+
+Change Tracking
+
+Model oluşturma (model builder)
+
+Migration (göç) mekanizmasının temel altyapısı
+
+📘 Örnek kullanım:
+
+public class AppDbContext : DbContext
+{
+    public DbSet<User> Users { get; set; }
+}
+
+⚙️ 2. Microsoft.EntityFrameworkCore.Design
+
+Design-time (tasarım zamanı) araçlarını sağlar.
+Yani uygulaman çalışmazken (örneğin terminalde migration oluştururken) gerekli olan kütüphaneler burada bulunur.
+
+dotnet ef migrations add ...
+
+dotnet ef database update
+
+gibi komutların çalışabilmesi için bu paket gerekir.
+
+📦 İçerdiği şeyler:
+
+Migration oluşturma komutları
+
+Scaffold (database-first) araçları
+
+Design-time DbContext bulucu altyapısı
+
+💡 Genellikle sadece development ortamında gerekir.
+Production’da bu paketi yüklemezsin.
+
+🗄️ 3. Microsoft.EntityFrameworkCore.SqlServer
+
+EF Core’un SQL Server sağlayıcısıdır.
+
+EF Core’un kendisi veritabanından bağımsızdır.
+Bu paket, EF Core’un SQL Server ile konuşabilmesini sağlar.
+
+📦 Sağladığı şeyler:
+
+SQL Server’a özel sorgu üretimi
+
+Veri tipleri dönüşümleri (örnek: DateTime → datetime2)
+
+SQL Server bağlantı yönetimi (SqlConnection, SqlTransaction)
+
+Migration’larda SQL Server’a uygun script oluşturma
+
+📘 Örnek:
+
+optionsBuilder.UseSqlServer("Server=.;Database=MyDb;Trusted_Connection=True;");
+
+🛠️ 4. Microsoft.EntityFrameworkCore.Tools
+
+Visual Studio Package Manager Console veya CLI (Command Line) üzerinden EF komutlarını çalıştırmak için kullanılır.
+
+📦 Sağladığı komutlar:
+
+Add-Migration
+
+Update-Database
+
+Remove-Migration
+
+Script-Migration
+
+Yani “EF komut satırı araçları”nı aktif hale getirir.
+
+💡 Kısacası:
+
+Design paketi → arka plandaki logic
+
+Tools paketi → komutları terminalde kullanmanı sağlar
+
+🔍 Özet tablo:
+Paket Adı	Görevi	Gereklilik
+Microsoft.EntityFrameworkCore	EF Core’un çekirdeği	Her projede zorunlu
+Microsoft.EntityFrameworkCore.Design	Migration/scaffold işlemleri için	Geliştirme zamanı
+Microsoft.EntityFrameworkCore.SqlServer	SQL Server ile iletişim	SQL Server kullanıyorsan zorunlu
+Microsoft.EntityFrameworkCore.Tools

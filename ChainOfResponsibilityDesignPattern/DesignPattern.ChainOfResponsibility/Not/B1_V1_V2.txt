@@ -1,0 +1,39 @@
+
+
+Bolum 1 : Chain of Responsibiility Design Pattern ( ASP.Net Core 5.0 - MSSQL )
+
+
+Bolum 1 Video 1 Giriþ
+
+Bolum 1 Video 2 TeorikAnlatim
+
+
+Chain of Responsibiility => Zincir Sorumluluk Ýlkesi
+
+
+Banka yönlendirme uygulamasý olarak örnek vermek gerekirse
+
+Birisi araba almak istiyor ve bunun için kredi çekecek
+
+Kredi miktarý 320 bin tl olsun
+
+Bankadaki çalýþanlar
+
+Veznedar => günlük kredi limit 100 bin tl 
+
+Þube Müdür Yardýmcýsý => günlük kredi limit 150 bin tl 
+
+Þube Müdürü => günlük kredi limit 250 bin tl
+
+Bölge Müdürü => günlük kredi limit 400 bin tl 
+
+
+Bankaya gidiyorsunuz ve veznadardan parayý istiyorsunuz limitim yok bir üste þube müdür yardýmcýsýna yönlendireyim diyor ve 
+yönlendirme iþlemi 400 bin tl olan bölge müdürüne kadar geliyor onay veriliyor krediyi alýyor 
+
+diyelim ki aradaki þube müdürü yok tatile gitmiþ þube müdür yardýmcýsýnýn yönlendireceði kimse yoksa bölge müdürüne yönlendirme yapmasý gerekiyor
+
+
+ASP.Net Core 5.0 ile 
+MSSQL
+Banka Yönlendirme Uygulamasý

@@ -7,8 +7,8 @@
 
 //namespace DesignPattern.ChainOfResponsibility.Migrations
 //{
-//    [DbContext(typeof(V5Context))]
-//    partial class V5ContextModelSnapshot : ModelSnapshot
+//    [DbContext(typeof(V6Context))]
+//    partial class V6ContextModelSnapshot : ModelSnapshot
 //    {
 //        protected override void BuildModel(ModelBuilder modelBuilder)
 //        {
@@ -18,7 +18,7 @@
 //                .HasAnnotation("ProductVersion", "5.0.17")
 //                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-//            modelBuilder.Entity("DesignPattern.ChainOfResponsibility.DAL.V5CustomerProcess", b =>
+//            modelBuilder.Entity("DesignPattern.ChainOfResponsibility.DAL.V6CustomerProcess", b =>
 //                {
 //                    b.Property<int>("CustomerProcessID")
 //                        .ValueGeneratedOnAdd()

@@ -1,0 +1,255 @@
+﻿
+
+Bolum 1 : Chain of Responsibiility Design Pattern ( ASP.Net Core 5.0 - MSSQL )
+
+
+Bolum 1 Video 6 Employee Sınıfı
+
+
+video 5 deki olusturdugum migration ve db yi kaldırdım tekrar video 6 için yeniden update yaptım 
+sebebi video5 de V5 olarak class olusturdum
+video 6 da V6 ya gectim karısıklık olmasın diye 
+hemde update cl kodlarını tekrar ediyorum 
+
+Type 'get-help NuGet' to see all available NuGet commands.
+
+PM> add-migration mig1
+Build started...
+Build succeeded.
+To undo this action, use Remove-Migration.
+PM> update-database
+Build started...
+Build succeeded.
+Applying migration '20251126184604_mig1'.
+Done.
+PM> 
+
+
+Models klasörü içine yeni bir class tanımlayalım 
+
+1. not baslangıc
+
+V6CustomerProcessViewModel
+
+1. not bitiş 
+
+V6CustomerProcessViewModel den geldik
+
+2. not baslangıc 
+
+klasör olusturalım
+
+V6ChainOfResponsibiility
+
+bu klasörün içine tanımlanması gereken bazı sınıflar var 
+
+konuyu anlatmak gerekirse
+
+kişiler var sırayla vezne müdür yard müdür şube müdürü vsvsvs gibi ama en sonundaki kişi boşa cıkıyor bir null deger donuyor 
+
+a=>b=>c=>d=> ? null
+
+burada approver kavramı yani onaylayıcısı giriyor işin içine 
+
+a nın approver i b b nin ki c c nin ki d 
+d nin ki kim ?
+
+null gelene kadar bu işlem devam edecek ama ilk adımda veznedar tutarı odeyecek ve bu işlemlere gerek olmama durumu da var 
+
+V6ChainOfResponsibiility içine V6Employee sınıfını olusturalım
+
+V6Employee E GİDELİM
+
+2. not bitiş 
+
+3. not baslangıç
+
+3. not bitiş 
+
+V6Employee da bitti
+
+
+------------
+
+olusturulan class notları
+
+------------
+
+using Microsoft.EntityFrameworkCore;
+
+namespace DesignPattern.ChainOfResponsibility.DAL
+{
+    public class V6Context : DbContext
+    {
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("server=DESKTOP-K88T80S\\SQLEXPRESS;initial catalog=DesignPattern1;integrated security=true;");
+        }
+
+        public DbSet<V6CustomerProcess> V5CustomerProcesses { get; set; }
+
+    }
+
+}
+
+------------
+
+
+using System.ComponentModel.DataAnnotations;
+
+namespace DesignPattern.ChainOfResponsibility.DAL
+{
+    public class V6CustomerProcess
+    {
+        [Key]
+        public int CustomerProcessID { get; set; }
+        public string Name { get; set; }
+        public string Amount { get; set; }
+        public string EmployeeName { get; set; }
+        public string Description { get; set; }
+
+
+    }
+}
+
+------------
+
+using System.ComponentModel.DataAnnotations;
+
+namespace DesignPattern.ChainOfResponsibility.Models
+{
+    public class V6CustomerProcessViewModel
+    {
+
+        [Key]
+        public int CustomerProcessID { get; set; }
+        public string Name { get; set; }
+        public string Amount { get; set; }
+        public string EmployeeName { get; set; }
+        public string Description { get; set; }
+
+
+    }
+}
+
+
+/*
+ 
+1. not başlangıc
+ 
+B1_V6 notlardan geldim
+
+V6CustomerProcessViewModel bizim entity miz den örnek alacak
+
+DAL klasörü içindeki V6CustomerProcess in içindekileri probları buraya kopyalayalım
+
+//        [Key]
+//        public int CustomerProcessID { get; set; }
+//        public string Name { get; set; }
+//        public string Amount { get; set; }
+//        public string EmployeeName { get; set; }
+//        public string Description { get; set; }
+
+V6CustomerProcess sınıfı entity için hareket edecek
+burası arada bir sanal sınıf olarak kullanılacak
+ 
+notlara geri dönelim
+
+1. not bitiş
+
+ 
+ 
+*/
+
+
+------------
+
+using DesignPattern.ChainOfResponsibility.Models;
+
+namespace DesignPattern.ChainOfResponsibility.V6ChainOfResponsibiility
+{
+    public abstract class V6Employee
+    {
+
+        protected V6Employee NextApprover;
+
+
+        public void SetNextApprover(V6Employee superVisor)
+        {
+            this.NextApprover = superVisor;
+        }
+
+        public abstract void ProcessRequest(V6CustomerProcessViewModel req);
+
+
+    }
+}
+
+
+/*
+ 
+3. not baslangıç
+
+B1_V6 notlardan geldik
+
+V6Employee
+ 
+ public class V6Employee
+    {
+    }
+
+abstract class olacak
+
+    public abstract class V6Employee
+    {
+    }
+
+abstract class lar ChainOfResponsibility nin yapı taslarından biri gibi bişey
+
+-------------------------------
+
+Abstract class ve interface arasındaki en temel fark olarak interface sadece metod imzası taşır. Abstract class ise metod imzaları ve implementasyonları içerir.
+ 
+ Abstract class'lar, diğer sınıfların bir şablona sahip olmasını sağlar ve içi dolu metodlar da içerebilirken, interface'ler sadece metod imzalarını tanımlar ve içi dolu metodlar içeremez. 
+Yani, abstract class'lar daha esnek ve genişletilebilirken, interface'ler daha çok sözleşmeleri ifade eder ve çoklu kalıtımı destekler.
+ 
+ -------------------------------
+ 
+ içine bir protected bir degisken tanımlayalım
+protected kendi bulundugu ve miras aldıgı sınıftan erişmenizi saglayan bir erişim belirleyicisi
+
+protected olunca bir yerden örnek almak gerekiyor 
+
+V6Employee sınıfından bir örnek aldık ve NextApprover sonraki onaylayıcı adında bir field tanımladık
+
+        protected V6Employee NextApprover;
+
+sonraki onaylayıcı bir calısan oluyor bundan dolayı employee sınıfında bunu tanımladık
+veznader da müdür yard hep sonraki approver calısan oluyor
+
+birde metot tanımlayalım sonraki onaylayıcıya geçir adımı gibi
+
+        public void SetNextApprover(V6Employee superVisor)
+        {
+            this.NextApprover = superVisor;
+        }
+
+V6Employee tipinde supervisor parametresini verdik
+
+içerideki field e bunun atamasını yaptık
+
+sonraki onaylayıcı kimse artık setnextapprover i cagıracak parametre gönderecek oradaki kısım da burada atamasını yapacak
+
+bir metot daha tanımlayalım
+
+        public abstract void ProcessRequest(V6CustomerProcessViewModel req);
+
+V6CustomerProcessViewModel den bir request alacak abstract oldugundan body si yok 
+
+dersi burada bitirelim diger derse gecelim 
+
+3. not bitiş
+ 
+ 
+ */
